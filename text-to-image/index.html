@@ -1,32 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Text to Image Generator</title>
-    <link rel="stylesheet" href="index.css">
-</head>
-<body>
-  <div class="container">
-    <h1>Text to Image Generator</h1>
-    <div class="input-group">
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Text to Image Generator</h1>
+      <div class="input-group">
         <label for="promptInput">Prompt</label>
-        <textarea id="promptInput" placeholder="Enter your image description..."></textarea>
-        
+        <textarea
+          id="promptInput"
+          placeholder="Enter your image description..."
+        ></textarea>
+
         <label for="negativePrompt">Negative Prompt (Optional)</label>
-        <textarea id="negativePrompt" placeholder="Enter things to avoid in the image..."></textarea>
-        
+        <textarea
+          id="negativePrompt"
+          placeholder="Enter things to avoid in the image..."
+        ></textarea>
+
+        <label for="resolutionSelect">Select Resolution</label>
+        <select id="resolutionSelect" class="resolution-select">
+          <optgroup label="Mobile Resolutions">
+            <option value="480x800">480x800</option>
+            <option value="720x1280">720x1280 (HD)</option>
+          </optgroup>
+          <optgroup label="Desktop Resolutions">
+            <option value="1024x768">1024x768</option>
+            <option value="1280x720" selected>1280x720 (HD)</option>
+          </optgroup>
+        </select>
+
         <button id="generateBtn">Generate Image</button>
         <small>By: Harold Torres</small>
-        <small>Images may take 1-2 minutes to be generated</small>
-    </div>
-    <div id="loading" class="loading">Generating image...</div>
-    <div id="error" class="error"></div>
-    <div id="result">
+        <small>Images may take 1-3 minutes to be generated</small>
+      </div>
+      <div id="loading" class="loading">Generating image...</div>
+      <div id="error" class="error"></div>
+      <div id="result">
         <img id="generatedImage" alt="Generated image will appear here" />
+      </div>
     </div>
-</div>
 
     <script type="module" src="index.js"></script>
-</body>
+  </body>
 </html>
