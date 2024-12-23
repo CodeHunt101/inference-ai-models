@@ -5,26 +5,25 @@ const MODEL = 'black-forest-labs/FLUX.1-dev'
 const inference = new HfInference(import.meta.env.VITE_HF_TOKEN)
 
 const promptInput = document.getElementById('promptInput')
-const negativePrompt = document.getElementById('negativePrompt')
 const resolutionSelect = document.getElementById('resolutionSelect')
 const generateBtn = document.getElementById('generateBtn')
 const loadingDiv = document.getElementById('loading')
 const errorDiv = document.getElementById('error')
 const generatedImage = document.getElementById('generatedImage')
 
+
 function getResolutionDimensions(resolutionString) {
   const [width, height] = resolutionString.split('x').map(Number)
   return { width, height }
 }
 
-async function generateImage(prompt, negative) {
+async function generateImage(prompt) {
   const { width, height } = getResolutionDimensions(resolutionSelect.value)
 
   const response = await inference.textToImage({
     model: MODEL,
     inputs: prompt,
     parameters: {
-      negative_prompt: negative || undefined,
       guidance_scale: 7.5,
       num_inference_steps: 50,
       width,
@@ -37,7 +36,6 @@ async function generateImage(prompt, negative) {
 
 generateBtn.addEventListener('click', async () => {
   const prompt = promptInput.value.trim()
-  const negative = negativePrompt.value.trim()
 
   if (!prompt) {
     errorDiv.textContent = 'Please enter a description'
@@ -52,7 +50,7 @@ generateBtn.addEventListener('click', async () => {
   generateBtn.disabled = true
 
   try {
-    const imageUrl = await generateImage(prompt, negative)
+    const imageUrl = await generateImage(prompt)
     generatedImage.src = imageUrl
     generatedImage.style.display = 'block'
   } catch (error) {
@@ -79,8 +77,3 @@ promptInput.addEventListener('keydown', (e) => {
   }
 })
 
-negativePrompt.addEventListener('keydown', (e) => {
-  if (e.ctrlKey && e.key === 'Enter' && !generateBtn.disabled) {
-    generateBtn.click()
-  }
-})
