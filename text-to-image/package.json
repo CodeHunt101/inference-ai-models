@@ -1,0 +1,14 @@
+{
+  "name": "huggingfsce-inference",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@huggingface/inference": "2.6.1",
+    "vite": "latest"
+  },
+  "devDependencies": {}
+}
