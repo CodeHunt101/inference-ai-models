@@ -25,7 +25,7 @@ async function generateImage(prompt) {
     inputs: prompt,
     parameters: {
       guidance_scale: 7.5,
-      num_inference_steps: 50,
+      num_inference_steps: 34,
       width,
       height,
     },
