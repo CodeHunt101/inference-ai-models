@@ -11,6 +11,33 @@ const loadingDiv = document.getElementById('loading')
 const errorDiv = document.getElementById('error')
 const generatedImage = document.getElementById('generatedImage')
 
+let timerInterval
+let startTime
+const timerElement = document.getElementById('timer')
+const placeholderElement = document.getElementById('placeholder')
+
+function updateTimer() {
+  const elapsed = Math.floor((Date.now() - startTime) / 1000)
+  const minutes = Math.floor(elapsed / 60)
+  const seconds = elapsed % 60
+  timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`
+}
+
+function startTimer() {
+  startTime = Date.now()
+  timerElement.style.display = 'block'
+  timerInterval = setInterval(updateTimer, 1000)
+}
+
+function stopTimer() {
+  clearInterval(timerInterval)
+  timerElement.style.display = 'none'
+}
+
+function updatePlaceholderDimensions() {
+  const { width, height } = getResolutionDimensions(resolutionSelect.value)
+  placeholderElement.style.aspectRatio = `${width} / ${height}`
+}
 
 function getResolutionDimensions(resolutionString) {
   const [width, height] = resolutionString.split('x').map(Number)
@@ -49,18 +76,24 @@ generateBtn.addEventListener('click', async () => {
   loadingDiv.style.display = 'block'
   generateBtn.disabled = true
 
+  // Show placeholder and start timer
+  placeholderElement.style.display = 'block'
+  startTimer()
+  updatePlaceholderDimensions()
+
   try {
     const imageUrl = await generateImage(prompt)
     generatedImage.src = imageUrl
     generatedImage.style.display = 'block'
   } catch (error) {
     console.error('Generation error:', error)
-    errorDiv.textContent =
-      'Error generating image. Please check your API token and try again.'
+    errorDiv.textContent = 'Error generating image. Please try again.'
     errorDiv.style.display = 'block'
   } finally {
     loadingDiv.style.display = 'none'
     generateBtn.disabled = false
+    placeholderElement.style.display = 'none'
+    stopTimer()
   }
 })
 
@@ -68,6 +101,7 @@ generateBtn.addEventListener('click', async () => {
 resolutionSelect.addEventListener('change', () => {
   const { width, height } = getResolutionDimensions(resolutionSelect.value)
   generatedImage.style.aspectRatio = `${width} / ${height}`
+  updatePlaceholderDimensions()
 })
 
 // Allow generating image with Ctrl+Enter
@@ -77,3 +111,4 @@ promptInput.addEventListener('keydown', (e) => {
   }
 })
 
+updatePlaceholderDimensions()
