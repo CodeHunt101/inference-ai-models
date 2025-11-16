@@ -1,8 +1,8 @@
-import { HfInference } from '@huggingface/inference'
+import { InferenceClient } from '@huggingface/inference';
 
-const MODEL = 'black-forest-labs/FLUX.1-dev'
+const MODEL = 'tencent/HunyuanImage-3.0'
 
-const inference = new HfInference(import.meta.env.VITE_HF_TOKEN)
+const inference = new InferenceClient(import.meta.env.VITE_HF_TOKEN)
 
 const promptInput = document.getElementById('promptInput')
 const resolutionSelect = document.getElementById('resolutionSelect')
@@ -48,10 +48,11 @@ async function generateImage(prompt) {
   const { width, height } = getResolutionDimensions(resolutionSelect.value)
 
   const response = await inference.textToImage({
+    provider: "fal-ai",
     model: MODEL,
     inputs: prompt,
     parameters: {
-      guidance_scale: 7.5,
+      // guidance_scale: 7.5,
       num_inference_steps: 34,
       width,
       height,
